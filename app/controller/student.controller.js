@@ -10,29 +10,50 @@ exports.create = (req, res) => {
     dep_id: req.body.department,
   };
 
-  Student.create(newStudent).then((data) => {
-    res
-      .json({
+  Student.create(newStudent)
+    .then((data) => {
+      res.json({
         message: "Student added successfully",
         data: data,
-      })
-      .catch((err) => {
-        res.status(500).json({
-          message: "Something went wrong",
-        });
       });
-  });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message: "Something went wrong",
+      });
+    });
 };
 
 // get all students
 exports.findAll = (req, res) => {
-  // console.log(req);
-  //Student.findAll({ include: ["students"] }).then((data) => {
   Student.findAll({ include: "departments" }).then((data) => {
     res.status(200).json({
       data: data,
     });
   });
+};
+
+exports.getCountByDepartment = (req, res) => {
+  Student.findAll({
+    // where: {
+    //   dep_id: 1,
+    // },
+    attributes: [
+      "dep_id",
+      db.sequelize.fn("COUNT", db.sequelize.col("dep_id"), "departments"),
+    ],
+    //include: "departments",
+
+    group: "dep_id",
+  })
+    .then((data) => {
+      res.status(200).json(data);
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message: "Something went wrong",
+      });
+    });
 };
 
 // exports.findById = (req, res) => {
@@ -69,7 +90,7 @@ exports.update = (req, res) => {
     name: req.body.name,
     address: req.body.address,
   };
-
+  console.log(updateStudent);
   Student.update(updateStudent, {
     where: {
       id: id,

@@ -6,6 +6,7 @@ const {
   findById,
   update,
   deleteById,
+  getCountByDepartment,
 } = require("../controller/student.controller");
 
 router.post("/", create);
@@ -17,5 +18,7 @@ router.get("/:id", findById);
 router.put("/:id", update);
 
 router.delete("/:id", deleteById);
+
+router.get("/department/count", getCountByDepartment);
 
 module.exports = router;
