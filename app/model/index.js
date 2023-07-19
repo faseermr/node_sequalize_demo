@@ -44,25 +44,25 @@ db.projects.belongsToMany(db.casts, {
 });
 
 const initialData = async () => {
-  // db.departments.create({
-  //   name: "Electronic",
-  // });
-  // db.departments.create({
-  //   name: "IT",
-  // });
-  // db.departments.create({
-  //   name: "Computer Science",
-  // });
+  db.departments.create({
+    name: "Electronic",
+  });
+  db.departments.create({
+    name: "IT",
+  });
+  db.departments.create({
+    name: "Computer Science",
+  });
 
-  // db.students.create({ name: "Faseer", address: "Matara" });
-  // db.students.create({ name: "Ahmed", address: "Galle" });
-  // db.students.create({ name: "Shuraim", address: "Colombo" });
+  db.students.create({ name: "Faseer", address: "Matara" });
+  db.students.create({ name: "Ahmed", address: "Galle" });
+  db.students.create({ name: "Shuraim", address: "Colombo" });
 
-  // db.projects.create({ name: "Samsung" });
-  // db.projects.create({ name: "Virtusa" });
+  db.projects.create({ name: "Samsung" });
+  db.projects.create({ name: "Virtusa" });
 
-  // db.casts.create({ name: "John" });
-  // db.casts.create({ name: "Martin" });
+  db.casts.create({ name: "John" });
+  db.casts.create({ name: "Martin" });
 
   const c1 = await db.casts.findOne({ where: { name: "John" } });
   const c2 = await db.casts.findOne({ where: { name: "Martin" } });

@@ -1,5 +1,6 @@
 const db = require("../model/index");
 const Student = db.students;
+const Department = db.departments;
 const Op = db.Sequelize.Op;
 
 // create new student
@@ -33,25 +34,68 @@ exports.findAll = (req, res) => {
   });
 };
 
+// exports.getCountByDepartment = (req, res) => {
+//   console.log({ response: "Hello" });
+//   Student.findAndCountAll({
+//     // where: {
+//     //   dep_id: 1,
+//     // },
+//     // attributes: [
+//     //   "dep_id",
+//     //   db.sequelize.fn("COUNT", db.sequelize.col("dep_id"), "departments"),
+//     // ],
+//     include: "departments",
+
+//     //group: "dep_id",
+//   })
+//     .then((data) => {
+//       res.status(200).json(data);
+//     })
+//     .catch((err) => {
+//       res.status(500).json({
+//         message: "Something went wrong",
+//       });
+//     });
+// };
+
+// get count
 exports.getCountByDepartment = (req, res) => {
+  console.log({ response: "Hello" });
   Student.findAll({
     // where: {
     //   dep_id: 1,
     // },
     attributes: [
       "dep_id",
-      db.sequelize.fn("COUNT", db.sequelize.col("dep_id"), "departments"),
+      [db.sequelize.fn("COUNT", db.sequelize.col("dep_id")), "count"],
     ],
-    //include: "departments",
+    include: [
+      {
+        model: Department,
+        as: "departments",
+        attributes: ["name"],
+      },
+    ],
 
     group: "dep_id",
   })
+    // Student.count({
+    //   // col: "dep_id",
+    //   include: "departments",
+    //   // attribute: ["dep_id", db.sequelize.fn("COUNT", db.sequelize.col("dep_id"))],
+    //   group: "dep_id",
+    // })
+    // db.sequelize
+    //   .query(
+    //     `SELECT student.dep_id, COUNT(dep_id), departments.id AS departments.id, departments.name AS departments.name FROM students AS student LEFT OUTER JOIN departments AS departments ON student.dep_id = departments.id GROUP BY dep_id`
+    //   )
     .then((data) => {
       res.status(200).json(data);
     })
     .catch((err) => {
       res.status(500).json({
         message: "Something went wrong",
+        error: err,
       });
     });
 };
