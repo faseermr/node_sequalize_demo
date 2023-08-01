@@ -15,9 +15,9 @@ const studentRoutes = require("./app/routes/student.routes");
 const departmentRoutes = require("./app/routes/department.routes");
 const projectRoutes = require("./app/routes/project.routes");
 
-app.use("/students", studentRoutes);
-app.use("/departments", departmentRoutes);
-app.use("/projects", projectRoutes);
+app.use("/api/students", studentRoutes);
+app.use("/api/departments", departmentRoutes);
+app.use("/api/projects", projectRoutes);
 
 app.all("*", (req, res, next) => {
   const err = new Error(`Requested URL ${req.path} not found`);

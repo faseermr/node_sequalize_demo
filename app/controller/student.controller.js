@@ -34,6 +34,17 @@ exports.findAll = (req, res) => {
   });
 };
 
+// exports.findAll = async(req,res) => {
+// const result =await db.sequelize.query(`Select * from students`,
+// // {
+// //         type: db.sequelize.QueryTypes.SELECT,
+// //       }
+//       )
+// res.status(200).json({
+//          data: result
+//        });
+// }
+
 // exports.getCountByDepartment = (req, res) => {
 //   console.log({ response: "Hello" });
 //   Student.findAndCountAll({
@@ -58,26 +69,35 @@ exports.findAll = (req, res) => {
 //     });
 // };
 
-// get count
+// get student count by department wise
 exports.getCountByDepartment = (req, res) => {
-  console.log({ response: "Hello" });
+  //console.log({ response: "Hello" });
   Student.findAll({
     // where: {
     //   dep_id: 1,
     // },
     attributes: [
       "dep_id",
-      [db.sequelize.fn("COUNT", db.sequelize.col("dep_id")), "count"],
+      //  [db.sequelize.fn("COUNT", db.sequelize.col("dep_id")), "count"],
+      [
+        db.sequelize.fn("COUNT", db.sequelize.col("departments.name")),
+        "count_dep_name",
+      ],
     ],
     include: [
       {
         model: Department,
         as: "departments",
-        attributes: ["name"],
+        attributes: [
+          "name",
+          [
+            db.sequelize.fn("COUNT", db.sequelize.col("departments.name")),
+            "count_dep_name",
+          ],
+        ],
       },
     ],
-
-    group: "dep_id",
+    group: ["departments.name"],
   })
     // Student.count({
     //   // col: "dep_id",
@@ -175,3 +195,6 @@ exports.deleteById = (req, res) => {
       });
     });
 };
+
+
+
